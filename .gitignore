@@ -10,6 +10,8 @@ yarn-error.log*
 # Dependency directories
 node_modules/
 jspm_packages/
+.env
+test/assets/js/dist/app.js
 
 # Optional npm cache directory
 .npm

@@ -35,9 +35,9 @@ const cts_client = new CTSClient("my_api_key", 10000); // default: 10000ms
 ## Methods
 
 - [Estimated Timetable](#estimated-timetable)
+- [Lines Discovery](#lines-discovery)
 - [Stop Monitoring](#stop-monitoring)
 - [Stop Points Discovery](#stop-points-discovery)
-- [Lines Discovery](#lines-discovery)
 
 ### Estimated Timetable
 
@@ -86,6 +86,32 @@ cts_client.estimatedTimetable(
   line_ref,
   direction_ref
 );
+```
+
+### Lines Discovery
+
+Returns a list of all lines.
+
+```javascript
+// ES6
+cts_client
+  .linesDiscovery()
+  .then(lines => {
+    console.log(lines);
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
+// ES5
+cts_client.linesDiscovery(function(lines, error) {
+  if (error) {
+    console.error(error);
+    return false;
+  }
+
+  console.log(lines);
+});
 ```
 
 ### Stop Monitoring
@@ -198,32 +224,6 @@ cts_client.stopPointsDiscovery(latitude, longitude, distance);
 
 // ES5
 cts_client.stopPointsDiscovery(function() {}, latitude, longitude, distance);
-```
-
-### Lines Discovery
-
-Returns a list of all lines.
-
-```javascript
-// ES6
-cts_client
-  .linesDiscovery()
-  .then(lines => {
-    console.log(lines);
-  })
-  .catch(error => {
-    console.error(error);
-  });
-
-// ES5
-cts_client.linesDiscovery(function(lines, error) {
-  if (error) {
-    console.error(error);
-    return false;
-  }
-
-  console.log(lines);
-});
 ```
 
 ## Version update

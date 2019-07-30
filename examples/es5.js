@@ -12,6 +12,18 @@ cts_client.estimatedTimetable(function(estimated_timetables, error) {
   console.groupEnd();
 });
 
+// linesDiscovery
+cts_client.linesDiscovery(function(lines, error) {
+  if (error) {
+    console.error(error);
+    return false;
+  }
+
+  console.group('linesDiscovery');
+  console.log(lines);
+  console.groupEnd();
+});
+
 // stopMonitoring
 cts_client.stopMonitoring(function(stop_monitoring, error) {
   if (error) {
@@ -33,17 +45,5 @@ cts_client.stopPointsDiscovery(function(stop_points, error) {
 
   console.group('stopPointsDiscovery');
   console.log(stop_points);
-  console.groupEnd();
-});
-
-// linesDiscovery
-cts_client.linesDiscovery(function(lines, error) {
-  if (error) {
-    console.error(error);
-    return false;
-  }
-
-  console.group('linesDiscovery');
-  console.log(lines);
   console.groupEnd();
 });

@@ -137,6 +137,28 @@ CTSClient.prototype.estimatedTimetable = function(callback, vehicle_mode, line_r
 }
 
 /**
+ * Get Lines Discovery
+ *
+ * @param {function} [n] callback
+ * @return {object} Results
+ *
+ * @example
+ *
+ *     my_client.linesDiscovery()
+ */
+CTSClient.prototype.linesDiscovery = function(callback) {
+  callback = (typeof callback === 'function') ? callback : function() {};
+
+  this.request('https://api.cts-strasbourg.eu/v1/siri/2.0/lines-discovery', null, function(data, error) {
+    if (!error && data) {
+      data = data.LinesDelivery.AnnotatedLineRef;
+    }
+
+    callback(data, error);
+  });
+}
+
+/**
  * Get Stop Monitoring
  *
  * @param {function} [n] callback
@@ -213,28 +235,6 @@ CTSClient.prototype.stopMonitoring = function(callback, monitoring_ref, vehicule
       }
 
       data = list;
-    }
-
-    callback(data, error);
-  });
-}
-
-/**
- * Get Lines Discovery
- *
- * @param {function} [n] callback
- * @return {object} Results
- *
- * @example
- *
- *     my_client.linesDiscovery()
- */
-CTSClient.prototype.linesDiscovery = function(callback) {
-  callback = (typeof callback === 'function') ? callback : function() {};
-
-  this.request('https://api.cts-strasbourg.eu/v1/siri/2.0/lines-discovery', null, function(data, error) {
-    if (!error && data) {
-      data = data.LinesDelivery.AnnotatedLineRef;
     }
 
     callback(data, error);

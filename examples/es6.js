@@ -13,6 +13,17 @@ cts_client.estimatedTimetable()
     console.error(error);
   });
 
+// linesDiscovery
+cts_client.linesDiscovery()
+  .then(lines => {
+    console.group('linesDiscovery');
+    console.log(lines);
+    console.groupEnd();
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
 // stopMonitoring
 cts_client.stopMonitoring('233A')
   .then(stop_monitoring => {
@@ -29,17 +40,6 @@ cts_client.stopPointsDiscovery()
   .then(stop_points => {
     console.group('stopPointsDiscovery');
     console.log(stop_points);
-    console.groupEnd();
-  })
-  .catch(error => {
-    console.error(error);
-  });
-
-// linesDiscovery
-cts_client.linesDiscovery()
-  .then(lines => {
-    console.group('linesDiscovery');
-    console.log(lines);
     console.groupEnd();
   })
   .catch(error => {

@@ -150,6 +150,25 @@ export default class CTSClient {
   }
 
   /**
+   * Get Lines Discovery
+   *
+   * @return {object} Results
+   *
+   * @example
+   *
+   *     my_client.linesDiscovery()
+   */
+  async linesDiscovery() {
+   return this.request('https://api.cts-strasbourg.eu/v1/siri/2.0/lines-discovery')
+     .then(data => {
+       return data.LinesDelivery.AnnotatedLineRef;
+     })
+     .catch(error => {
+       return Promise.reject(Error(error));
+     });
+  }
+
+  /**
    * Get Stop Monitoring
    *
    * @param {string} monitoring_ref
@@ -224,25 +243,6 @@ export default class CTSClient {
        }
 
        return list;
-     })
-     .catch(error => {
-       return Promise.reject(Error(error));
-     });
-  }
-
-  /**
-   * Get Lines Discovery
-   *
-   * @return {object} Results
-   *
-   * @example
-   *
-   *     my_client.linesDiscovery()
-   */
-  async linesDiscovery() {
-   return this.request('https://api.cts-strasbourg.eu/v1/siri/2.0/lines-discovery')
-     .then(data => {
-       return data.LinesDelivery.AnnotatedLineRef;
      })
      .catch(error => {
        return Promise.reject(Error(error));

@@ -3,6 +3,15 @@
   "version": "1.0.0",
   "description": "Javascript client for CTS API (Compagnie des transports strasbourgeois)",
   "main": "src/cts-client.js",
+  "scripts": {
+    "test": "webpack --config test/webpack.config.js --watch"
+  },
+  "devDependencies": {
+    "dotenv": "^8.0.0",
+    "webpack": "^4.38.0",
+    "webpack-cli": "^3.3.6"
+  },
+  "author": "Jérôme Wohlschlegel <jerome.wohlschlegel@gmail.com>",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/w-jerome/cts-client.git"
@@ -18,7 +27,6 @@
     "client",
     "strasbourg"
   ],
-  "author": "Jérôme Wohlschlegel <jerome.wohlschlegel@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/w-jerome/cts-client/issues"

@@ -25,7 +25,8 @@
     "javascript",
     "api",
     "client",
-    "strasbourg"
+    "strasbourg",
+    "velhop"
   ],
   "license": "MIT",
   "bugs": {

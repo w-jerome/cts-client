@@ -98,7 +98,7 @@ CTSClient.prototype.request = function(request, params, callback) {
 }
 
 /**
- * Get Estimated Timetable
+ * Estimated Timetable service is used to inform interested schedule information systems of the current status of all known VEHICLE JOURNEYs. All VEHICLE JOURNEYs currently running and all those that start in the hour are returned.
  *
  * @param {function} [n] callback
  * @param {string} [n] vehicle_mode
@@ -137,7 +137,7 @@ CTSClient.prototype.estimatedTimetable = function(callback, vehicle_mode, line_r
 }
 
 /**
- * Get Lines Discovery
+ * Returns a list of all lines
  *
  * @param {function} [n] callback
  * @return {object} Results
@@ -159,7 +159,7 @@ CTSClient.prototype.linesDiscovery = function(callback) {
 }
 
 /**
- * Get Stop Monitoring
+ * Stop Monitoring service provides a stop-centric view of VEHICLE departures (in realtime) at a list of designated stops.
  *
  * @param {function} [n] callback
  * @param {string} monitoring_ref
@@ -242,7 +242,7 @@ CTSClient.prototype.stopMonitoring = function(callback, monitoring_ref, vehicule
 }
 
 /**
- * Get Stop Points Discovery
+ * Returns a list of stop points
  *
  * @param {function} [n] callback
  * @param {number} [n] latitude
@@ -274,6 +274,141 @@ CTSClient.prototype.stopPointsDiscovery = function(callback, latitude, longitude
   this.request('https://api.cts-strasbourg.eu/v1/siri/2.0/stoppoints-discovery', params, function(data, error) {
     if (!error && data) {
       data = data.StopPointsDelivery.AnnotatedStopPointRef;
+    }
+
+    callback(data, error);
+  });
+}
+
+/**
+ * Returns a list of park and ride with available spots
+ *
+ * @param {function} [n] callback
+ * @return {object} Results
+ *
+ * @example
+ *
+ *     my_client.parkAndRide()
+ */
+CTSClient.prototype.parkAndRide = function(callback) {
+  this.request('https://api.cts-strasbourg.eu/v1/cts/park-and-ride', null, function(data, error) {
+    if (!error && data) {
+      data = data.ParkAndRide;
+    }
+
+    callback(data, error);
+  });
+}
+
+/**
+ * Returns a list of retail outlet
+ *
+ * @param {function} [n] callback
+ * @param {boolean} [n] ticket_sales
+ * @param {boolean} [n] badgeo_top_up
+ * @param {string} [n] types
+ * @param {number} [n] latitude
+ * @param {number} [n] longitude
+ * @param {number} [n] distance
+ * @return {object} Results
+ *
+ * @example
+ *
+ *     my_client.retailOutlet()
+ */
+
+CTSClient.prototype.retailOutlet = function(callback, ticket_sales, badgeo_top_up, types, latitude, longitude, distance) {
+  callback = (typeof callback === 'function') ? callback : function() {};
+
+  var params = [];
+
+  if (typeof ticket_sales === 'boolean') {
+    params.push({TicketSales: ticket_sales});
+  }
+
+  if (typeof badgeo_top_up === 'boolean') {
+    params.push({BadgeoTopUp: badgeo_top_up});
+  }
+
+  if (typeof types === 'string') {
+    params.push({types: types});
+  }
+
+  if (typeof latitude === 'number') {
+    params.push({latitude: latitude});
+  }
+
+  if (typeof longitude === 'number') {
+    params.push({longitude: longitude});
+  }
+
+  if (typeof distance === 'number') {
+    params.push({distance: distance});
+  }
+
+  this.request('https://api.cts-strasbourg.eu/v1/cts/retail-outlet', params, function(data, error) {
+    if (!error && data) {
+      data = data.RetailOutlet;
+    }
+
+    callback(data, error);
+  });
+}
+
+/**
+ * Returns a list of retail outlet types
+ *
+ * @param {function} [n] callback
+ * @return {object} Results
+ *
+ * @example
+ *
+ *     my_client.retailOutletTypes()
+ */
+CTSClient.prototype.retailOutletTypes = function(callback) {
+  this.request('https://api.cts-strasbourg.eu/v1/cts/retail-outlet/types', null, function(data, error) {
+    if (!error && data) {
+      data = data.RetailOutletType;
+    }
+
+    callback(data, error);
+  });
+}
+
+/**
+ * Returns a list of veloparc
+ *
+ * @param {function} [n] callback
+ * @return {object} Results
+ *
+ * @example
+ *
+ *     my_client.veloparc()
+ */
+CTSClient.prototype.veloparc = function(callback) {
+  this.request('https://api.cts-strasbourg.eu/v1/cts/veloparc', null, function(data, error) {
+    if (!error && data) {
+      data = data.Veloparc;
+    }
+
+    callback(data, error);
+  });
+}
+
+/**
+ * Returns a list of velhop automatic stations and stores
+ *
+ * @param {function} [n] callback
+ * @return {object} Results
+ *
+ * @example
+ *
+ *     my_client.velhop()
+ */
+CTSClient.prototype.velhop = function(callback) {
+  this.request('https://api.cts-strasbourg.eu/v1/velhop/velhop', null, function(data, error) {
+    if (!error && data) {
+      data = data.Velhop;
     }
 
     callback(data, error);

@@ -1,4 +1,4 @@
-const cts_client = new CTSClient('my_api_key');
+const cts_client = new CTSClient(`${process.env.API_KEY}:`);
 
 // estimatedTimetable
 cts_client.estimatedTimetable(function(estimated_timetables, error) {

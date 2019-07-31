@@ -113,7 +113,7 @@ export default class CTSClient {
   }
 
   /**
-   * Get Estimated Timetable
+   * Estimated Timetable service is used to inform interested schedule information systems of the current status of all known VEHICLE JOURNEYs. All VEHICLE JOURNEYs currently running and all those that start in the hour are returned.
    *
    * @param {string} [n] vehicle_mode
    * @param {string} [n] line_ref
@@ -141,16 +141,16 @@ export default class CTSClient {
     }
 
    return this.request('https://api.cts-strasbourg.eu/v1/siri/2.0/estimated-timetable', params)
-     .then(data => {
-       return data.ServiceDelivery.EstimatedTimetableDelivery;
-     })
-     .catch(error => {
-       return Promise.reject(Error(error));
-     });
+   .then(data => {
+     return data.ServiceDelivery.EstimatedTimetableDelivery;
+   })
+   .catch(error => {
+     return Promise.reject(Error(error));
+   });
   }
 
   /**
-   * Get Lines Discovery
+   * Returns a list of all lines
    *
    * @return {object} Results
    *
@@ -159,17 +159,17 @@ export default class CTSClient {
    *     my_client.linesDiscovery()
    */
   async linesDiscovery() {
-   return this.request('https://api.cts-strasbourg.eu/v1/siri/2.0/lines-discovery')
-     .then(data => {
-       return data.LinesDelivery.AnnotatedLineRef;
-     })
-     .catch(error => {
-       return Promise.reject(Error(error));
-     });
+    return this.request('https://api.cts-strasbourg.eu/v1/siri/2.0/lines-discovery')
+    .then(data => {
+      return data.LinesDelivery.AnnotatedLineRef;
+    })
+    .catch(error => {
+      return Promise.reject(Error(error));
+    });
   }
 
   /**
-   * Get Stop Monitoring
+   * Stop Monitoring service provides a stop-centric view of VEHICLE departures (in realtime) at a list of designated stops.
    *
    * @param {string} monitoring_ref
    * @param {string} [n] vehicule_mode
@@ -186,71 +186,72 @@ export default class CTSClient {
    *     my_client.stopMonitoring('my_monitoring_ref')
    */
   async stopMonitoring(monitoring_ref, vehicule_mode, preview_interval, start_time, line_ref, direction_ref, maximum_stop_visits, minimum_stop_visits_per_line) {
-   if (typeof monitoring_ref !== 'string' || !monitoring_ref) {
-     return Promise.reject(Error(`Settings missing`));
-   }
+    if (typeof monitoring_ref !== 'string' || !monitoring_ref) {
+      return Promise.reject(Error(`Settings missing`));
+    }
 
-   let params = [
-     {
-       MonitoringRef: monitoring_ref,
-     },
-   ];
+    let params = [
+      {
+        MonitoringRef: monitoring_ref,
+      },
+    ];
 
-   if (typeof vehicule_mode === 'string') {
-     params.push({VehicleMode: vehicule_mode});
-   }
+    if (typeof vehicule_mode === 'string') {
+      params.push({VehicleMode: vehicule_mode});
+    }
 
-   if (typeof preview_interval === 'string') {
-     params.push({PreviewInterval: preview_interval});
-   }
+    if (typeof preview_interval === 'string') {
+      params.push({PreviewInterval: preview_interval});
+    }
 
-   if (typeof start_time === 'string') {
-     params.push({StartTime: start_time});
-   }
+    if (typeof start_time === 'string') {
+      params.push({StartTime: start_time});
+    }
 
-   if (typeof line_ref === 'string') {
-     params.push({LineRef: line_ref});
-   }
+    if (typeof line_ref === 'string') {
+      params.push({LineRef: line_ref});
+    }
 
-   if (typeof direction_ref === 'number') {
-     params.push({DirectionRef: direction_ref});
-   }
+    if (typeof direction_ref === 'number') {
+      params.push({DirectionRef: direction_ref});
+    }
 
-   if (typeof maximum_stop_visits === 'number') {
-     params.push({MaximumStopVisits: maximum_stop_visits});
-   }
+    if (typeof maximum_stop_visits === 'number') {
+      params.push({MaximumStopVisits: maximum_stop_visits});
+    }
 
-   if (typeof minimum_stop_visits_per_line === 'number') {
-     params.push({MinimumStopVisitsPerLine: minimum_stop_visits_per_line});
-   }
+    if (typeof minimum_stop_visits_per_line === 'number') {
+      params.push({MinimumStopVisitsPerLine: minimum_stop_visits_per_line});
+    }
 
-   return this.request('https://api.cts-strasbourg.eu/v1/siri/2.0/stop-monitoring', params)
-     .then(data => {
-       let list = [];
+    return this.request('https://api.cts-strasbourg.eu/v1/siri/2.0/stop-monitoring', params)
+    .then(data => {
+      let list = [];
 
-       if (!Array.isArray(data.ServiceDelivery.StopMonitoringDelivery)) {
-         return list;
-       }
+      if (!Array.isArray(data.ServiceDelivery.StopMonitoringDelivery)) {
+        return list;
+      }
 
-       for (var delivery_i = 0; delivery_i < data.ServiceDelivery.StopMonitoringDelivery.length; delivery_i++) {
-         if (!Array.isArray(data.ServiceDelivery.StopMonitoringDelivery[delivery_i].MonitoredStopVisit)) {
-           continue;
-         }
+      for (var delivery_i = 0; delivery_i < data.ServiceDelivery.StopMonitoringDelivery.length; delivery_i++) {
+        if (!Array.isArray(data.ServiceDelivery.StopMonitoringDelivery[delivery_i].MonitoredStopVisit)) {
+          continue;
+        }
 
-         for (var stop_i = 0; stop_i < data.ServiceDelivery.StopMonitoringDelivery[delivery_i].MonitoredStopVisit.length; stop_i++) {
-           list.push(data.ServiceDelivery.StopMonitoringDelivery[delivery_i].MonitoredStopVisit[stop_i].MonitoredVehicleJourney);
-         }
-       }
+        for (var stop_i = 0; stop_i < data.ServiceDelivery.StopMonitoringDelivery[delivery_i].MonitoredStopVisit.length; stop_i++) {
+          list.push(data.ServiceDelivery.StopMonitoringDelivery[delivery_i].MonitoredStopVisit[stop_i].MonitoredVehicleJourney);
+        }
+      }
 
-       return list;
-     })
-     .catch(error => {
-       return Promise.reject(Error(error));
-     });
+      return list;
+    })
+    .catch(error => {
+      return Promise.reject(Error(error));
+    });
   }
 
   /**
-   * Get Stop Points Discovery
+   * Returns a list of stop points
+   *
    * @param {number} [n] latitude
    * @param {number} [n] longitude
    * @param {number} [n] distance
@@ -277,11 +278,139 @@ export default class CTSClient {
     }
 
    return this.request('https://api.cts-strasbourg.eu/v1/siri/2.0/stoppoints-discovery', params)
-     .then(data => {
-       return data.StopPointsDelivery.AnnotatedStopPointRef;
-     })
-     .catch(error => {
-       return Promise.reject(Error(error));
-     });
+   .then(data => {
+     return data.StopPointsDelivery.AnnotatedStopPointRef;
+   })
+   .catch(error => {
+     return Promise.reject(Error(error));
+   });
+  }
+
+  /**
+   * Returns a list of park and ride with available spots
+   *
+   * @return {object} Results
+   *
+   * @example
+   *
+   *     my_client.parkAndRide()
+   */
+  async parkAndRide() {
+    return this.request('https://api.cts-strasbourg.eu/v1/cts/park-and-ride')
+    .then(data => {
+      return data.ParkAndRide;
+    })
+    .catch(error => {
+      return Promise.reject(Error(error));
+    });
+  }
+
+  /**
+   * Returns a list of retail outlet
+   *
+   * @param {boolean} [n] ticket_sales
+   * @param {boolean} [n] badgeo_top_up
+   * @param {string} [n] types
+   * @param {number} [n] latitude
+   * @param {number} [n] longitude
+   * @param {number} [n] distance
+   * @return {object} Results
+   *
+   * @example
+   *
+   *     my_client.retailOutlet()
+   */
+  async retailOutlet(ticket_sales, badgeo_top_up, types, latitude, longitude, distance) {
+
+    let params = [];
+
+    if (typeof ticket_sales === 'boolean') {
+      params.push({TicketSales: ticket_sales});
+    }
+
+    if (typeof badgeo_top_up === 'boolean') {
+      params.push({BadgeoTopUp: badgeo_top_up});
+    }
+
+    if (typeof types === 'string') {
+      params.push({types: types});
+    }
+
+    if (typeof latitude === 'number') {
+      params.push({latitude: latitude});
+    }
+
+    if (typeof longitude === 'number') {
+      params.push({longitude: longitude});
+    }
+
+    if (typeof distance === 'number') {
+      params.push({distance: distance});
+    }
+
+    return this.request('https://api.cts-strasbourg.eu/v1/cts/retail-outlet', params)
+    .then(data => {
+      return data.RetailOutlet;
+    })
+    .catch(error => {
+      return Promise.reject(Error(error));
+    });
+  }
+
+  /**
+   * Returns a list of retail outlet types
+   *
+   * @return {object} Results
+   *
+   * @example
+   *
+   *     my_client.retailOutletTypes()
+   */
+  async retailOutletTypes() {
+    return this.request('https://api.cts-strasbourg.eu/v1/cts/retail-outlet/types')
+    .then(data => {
+      return data.RetailOutletType;
+    })
+    .catch(error => {
+      return Promise.reject(Error(error));
+    });
+  }
+
+  /**
+   * Returns a list of veloparc
+   *
+   * @return {object} Results
+   *
+   * @example
+   *
+   *     my_client.veloparc()
+   */
+  async veloparc() {
+    return this.request('https://api.cts-strasbourg.eu/v1/cts/veloparc')
+    .then(data => {
+      return data.Veloparc;
+    })
+    .catch(error => {
+      return Promise.reject(Error(error));
+    });
+  }
+
+  /**
+   * Returns a list of velhop automatic stations and stores
+   *
+   * @return {object} Results
+   *
+   * @example
+   *
+   *     my_client.velhop()
+   */
+  async velhop() {
+    return this.request('https://api.cts-strasbourg.eu/v1/velhop/velhop')
+    .then(data => {
+      return data.Velhop;
+    })
+    .catch(error => {
+      return Promise.reject(Error(error));
+    });
   }
 }

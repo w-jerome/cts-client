@@ -1,6 +1,6 @@
 {
   "name": "cts-client",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Javascript client for CTS API (Compagnie des transports strasbourgeois)",
   "main": "src/cts-client.js",
   "scripts": {
